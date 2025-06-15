@@ -29,7 +29,9 @@ export default function BracketControl() {
 
             
             if (Platform.OS === 'android') {
-                await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);          
+                await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+                await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT);
+                await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN);          
             }
 
              manager.startDeviceScan(null, null, (error, device) => {

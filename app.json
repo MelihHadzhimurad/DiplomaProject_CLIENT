@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Smart_Tire_Bracket_CLIENT",
+    "name": "Smart Tire",
     "slug": "Smart_Tire_Bracket_CLIENT",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -13,7 +13,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
