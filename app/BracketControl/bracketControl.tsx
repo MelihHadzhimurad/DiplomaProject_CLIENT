@@ -4,7 +4,7 @@ import { styles } from "../globalStyles";
 
 export default function BracketControl() {
 
-    const permissionKey = useLocalSearchParams();
+    const { permissionKey } = useLocalSearchParams();
 
     return(
         <SafeAreaView style={styles.container} >
@@ -14,7 +14,7 @@ export default function BracketControl() {
                 }}
             />
 
-            <Text>cabchjdbcdbjhc</Text>
+            <Text>{permissionKey}</Text>
         </SafeAreaView>
     );
 }
