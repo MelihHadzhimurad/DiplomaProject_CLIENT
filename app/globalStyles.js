@@ -62,5 +62,23 @@ export const styles = StyleSheet.create({
         margin:10,
         borderRadius:20,
         borderWidth: 2
+    },
+
+    control_panel_container: {
+        backgroundColor: colors.background_color,
+        display: "flex",
+        flex: 1,
+        flexDirection: "column",
+        alignItems: "center",
+    }, 
+    
+    espMessageField: {
+        marginTop: 40,
+        marginBottom: 70
+    },
+
+    disconnect_button: {
+        marginTop: 70
     }
+    
 });
