@@ -1,9 +1,13 @@
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
+import { useSearchParams } from "expo-router/build/hooks";
+import { useState } from "react";
 import { Pressable, SafeAreaView, Text } from "react-native";
+import { showAlert } from "../Auxiliary/auxiliary";
+import { useBleManager } from "../Auxiliary/bleContextProvider";
 import { styles } from "../globalStyles";
 
 export default function controlPanel() {
-    /*const rawId = useSearchParams();
+    const rawId = useSearchParams();
     const deviceId = decodeURIComponent(rawId.toString()).split("=")[1];
     const [isConnected, setIsConnected] = useState(false);
     const manager = useBleManager();
@@ -29,7 +33,7 @@ export default function controlPanel() {
             return;
             })
         } catch (error) { showAlert('Неуспешно раздовяване: '+ error); router.back(); }
-    }*/
+    }
 
     return(
         <SafeAreaView style={styles.control_panel_container}>
