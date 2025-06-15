@@ -1,8 +1,9 @@
-import { Stack, useLocalSearchParams } from "expo-router";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { FlatList, PermissionsAndroid, Platform, Pressable, SafeAreaView, Text } from "react-native";
-import { BleManager, Device, State } from 'react-native-ble-plx';
+import { Device, State } from 'react-native-ble-plx';
 import { showAlert } from '../Auxiliary/auxiliary';
+import { useBleManager } from "../Auxiliary/bleContextProvider";
 import { colors } from "../constants";
 import { styles } from "../globalStyles";
 
@@ -10,28 +11,8 @@ export default function BracketControl() {
 
     const { permissionKey } = useLocalSearchParams();
     const [ devices, setDevices ] = useState<Device[]>([]);
-    const manager = new BleManager();
+    const manager = useBleManager();
     const [scanFlag, setScanFlag] = useState(false);
-    const [isConnected, setIsConnected] = useState(false);
-
-
-    async function connectToDevice(deviceId:string) {
-        try {
-            await manager.connectToDevice(deviceId).then(device => {
-                showAlert("свързано към усторйство "+device.name);
-                setIsConnected(true);
-            })
-        } catch (error) { showAlert('Неуспешно свързване: '+ error); }
-    }
-
-    async function disconnectFromDevice(deviceId:string) {
-        try {
-            await manager.cancelDeviceConnection(deviceId).then(device => {
-                showAlert("Успешно раздвояване ");
-                setIsConnected(false);
-            })
-        } catch (error) { showAlert('Неуспешно раздовяване: '+ error); }
-    }
 
     useEffect(() => {
         if (!scanFlag) { return; }
@@ -112,11 +93,8 @@ export default function BracketControl() {
                 renderItem={({ item }) => (
                     <Pressable
                         style={styles.device}
-                        onPress={() =>{
-                            if(isConnected) { disconnectFromDevice(item.id) }
-                            else { connectToDevice(item.id) }
-                        }}>
-
+                        onPress={() =>{ router.push({ pathname: "/BracketControl/controlPanel",
+                                                      params: { "rawId": encodeURIComponent(item.id)}}) }}>
                         <Text>{ item.name }</Text>
                     </Pressable>
                 )}
