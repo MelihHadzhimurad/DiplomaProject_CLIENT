@@ -32,7 +32,7 @@ export default function Index() {
       <Pressable
         style={styles.button}
         //onPress={() => router.push("/bracketCheck/bracketCheck")}
-        onPress={() => router.push("/BracketControl/bracketControl?permissionKey=ahcjhabcjkac")}>
+        onPress={() => router.push("/BracketControl/scanningScreen?permissionKey=ahcjhabcjkac")}>
         <Text style={styles.button_text}>Проверка за поставена скоба</Text>
       </Pressable>
     </SafeAreaView>

@@ -55,11 +55,12 @@ export const styles = StyleSheet.create({
 
     device: {
         marginVertical: 10,
-        backgroundColor:"red",
+        backgroundColor:colors.device_button_color,
         alignContent: "center",
         justifyContent: "center",
         padding:10,
         margin:10,
-        borderRadius:20
+        borderRadius:20,
+        borderWidth: 2
     }
 });
