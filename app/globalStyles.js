@@ -51,5 +51,15 @@ export const styles = StyleSheet.create({
         width: "70%",
         textAlign: "left",
         paddingLeft: 20
+    },
+
+    device: {
+        marginVertical: 10,
+        backgroundColor:"red",
+        alignContent: "center",
+        justifyContent: "center",
+        padding:10,
+        margin:10,
+        borderRadius:20
     }
 });
