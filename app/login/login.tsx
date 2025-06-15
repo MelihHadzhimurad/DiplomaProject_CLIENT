@@ -1,4 +1,4 @@
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import { Pressable, Text, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "../globalStyles";
@@ -21,7 +21,7 @@ export default function login() {
             
             <Pressable
                 style={styles.button}
-                onPress={() => alert("Грешни данни!")} >
+                onPress={() => router.push("/BracketControl/scanningScreen")} >
                     <Text style={styles.button_text}>Потвърди</Text>
             </Pressable>
             
