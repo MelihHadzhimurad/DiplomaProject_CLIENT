@@ -86,7 +86,8 @@ export default function controlPanel() {
             </Pressable>
             <Pressable
                 style={styles.button}
-                onPress={() => {writeCommand("501221065:close")}}>
+                onPressIn={() => {writeCommand("501221065:close")}}
+                onPressOut={() => {writeCommand("501221065:stop")}}>
                 <Text style={styles.button_text}>Зaтягане</Text>
             </Pressable>
             <Pressable
