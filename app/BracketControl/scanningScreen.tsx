@@ -66,7 +66,8 @@ export default function BracketControl() {
         <SafeAreaView style={styles.container} >
             <Stack.Screen
                 options={{
-                title: "Намиране на устройство"
+                title: "Намиране на устройство",
+                headerBackVisible: false
                 }}
             />
 
