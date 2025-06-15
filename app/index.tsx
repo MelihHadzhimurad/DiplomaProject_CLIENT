@@ -1,4 +1,4 @@
-import { Stack, useRouter } from "expo-router";
+import { Stack, usePathname, useRouter } from "expo-router";
 import { Pressable, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./globalStyles";
@@ -31,7 +31,8 @@ export default function Index() {
 
       <Pressable
         style={styles.button}
-        onPress={() => router.push("/bracketCheck/bracketCheck")} >
+        //onPress={() => router.push("/bracketCheck/bracketCheck")}
+        onPress={() => router.push("/BracketControl/bracketControl?token=ahcjhabcjkac")}
         <Text style={styles.button_text}>Проверка за поставена скоба</Text>
       </Pressable>
     </SafeAreaView>
