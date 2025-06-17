@@ -60,7 +60,9 @@ export default function login() {
             
             <Pressable
                 style={styles.button}
-                onPress={() => loginRequest()} >
+                onPress={() => router.push({ pathname: "/BracketControl/scanningScreen",
+                          params: { "rawToken": encodeURIComponent("someKey") }
+            })} >
                     <Text style={styles.button_text}>Потвърди</Text>
             </Pressable>
             

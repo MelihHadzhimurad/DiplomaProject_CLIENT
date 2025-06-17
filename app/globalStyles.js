@@ -41,7 +41,8 @@ export const styles = StyleSheet.create({
         width: "70%",
         height: "10%",
         borderRadius: 25,
-        marginBottom: 20
+        marginBottom: 20,
+        textAlign:'center'
     },
 
     input_headers: {
@@ -73,41 +74,21 @@ export const styles = StyleSheet.create({
     }, 
     
     espMessageField: {
-        marginTop: 40,
-        marginBottom: 70
+        marginTop: 15,
+        marginBottom: 25
     },
 
     disconnect_button: {
-        marginTop: 70
+        marginTop: 30
     },
 
-    overlay: {
-        flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.4)',
+    control_input: {
+        width: '35%',
+        marginVertical: 10,
+        marginHorizontal: 5,
         justifyContent: 'center',
         alignItems: 'center',
-    },
-
-    modalContainer: {
-        width: '90%',
-        padding: 20,
-        borderRadius: 10,
-        backgroundColor: '#fff',
-        elevation: 5,
-    },
-
-    label: {
-        fontWeight: 'bold',
-        marginTop: 10,
-    },
-
-    input: {
-        borderWidth: 1,
-        borderColor: '#aaa',
-        borderRadius: 5,
-        paddingHorizontal: 10,
-        paddingVertical: 8,
-        marginTop: 5,
+        height: '100%'
     }
     
 });

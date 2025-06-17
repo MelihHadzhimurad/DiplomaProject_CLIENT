@@ -20,7 +20,7 @@ export default function BracketControl() {
             const state = await manager.state();
 
             if(state !== State.PoweredOn) {
-                showAlert("Bluetooth e изключен!");
+                showAlert("Bluetooth e изключен, включете!");
                 setScanFlag(false);
                 return;
             }

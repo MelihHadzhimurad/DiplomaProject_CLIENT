@@ -3,10 +3,8 @@ import * as Location from 'expo-location';
 import { router, Stack } from "expo-router";
 import { useSearchParams } from "expo-router/build/hooks";
 import { useState } from "react";
-import { Modal, Pressable, SafeAreaView, Text, TouchableOpacity } from "react-native";
+import { Pressable, SafeAreaView, Text, TextInput, View } from "react-native";
 import { Device } from "react-native-ble-plx";
-import { TextInput } from 'react-native-gesture-handler';
-import { View } from 'react-native-reanimated/lib/typescript/Animated';
 import { showAlert } from "../Auxiliary/auxiliary";
 import { useBleManager } from "../Auxiliary/bleContextProvider";
 import { styles } from "../globalStyles";
@@ -14,9 +12,6 @@ import { styles } from "../globalStyles";
 export default function controlPanel() {
     const rawId = useSearchParams();
     const rawToken = useSearchParams();
-
-    const [modalVisible, setModalVisible] = useState(false);
-
     
     const permissionKey = decodeURIComponent(rawToken.toString()).split("=")[1];
     const [bracketid, setBracketid] = useState("");
@@ -29,7 +24,7 @@ export default function controlPanel() {
     const controlCharacteristicUUID = "85dd6465-3ed9-4a65-8697-fb2fde22d06e";
     
     const manager = useBleManager();
-    const deviceId = decodeURIComponent(rawId.toString()).split("=")[1];
+    const deviceId = decodeURIComponent(rawId.toString()).split("=")[1].split("&")[0];
     const [connectedDevice, setConnectedDevice] = useState<Device | null>(null);
     const [isConnected, setIsConnected] = useState(false);
     const [message, setMessage] = useState(""); 
@@ -42,8 +37,6 @@ export default function controlPanel() {
         const loc = await Location.getCurrentPositionAsync();
         setLatitude(loc.coords.latitude);
         setLongtitude(loc.coords.longitude);
-
-        setModalVisible(true);
     };
 
     if(!isConnected) {
@@ -131,8 +124,7 @@ export default function controlPanel() {
                 }
                 else { showAlert("Неуспешно завършване!\nОпитайте пак."); }
             }
-            
-            setModalVisible(false);
+
             writeCommand("501221065:client-"+result);
 
         }catch(error) {
@@ -152,6 +144,28 @@ export default function controlPanel() {
             />
             <Text style={styles.header}> {connectedDevice?.name} </Text>
             <Text style={[styles.input_fields, styles.espMessageField]}> { message } </Text>
+
+            <View
+            style={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center'
+            }}>
+                    <TextInput
+                    style={[styles.input_fields, styles.control_input]}
+                    placeholder='Регистрационен номер'
+                    value={carNumber}
+                    onChangeText={setCarNumber} />
+
+                <TextInput
+                    style={[styles.input_fields, styles.control_input]}
+                    placeholder='Идентификатор скоба'
+                    value={bracketid}
+                    onChangeText={setBracketid}/>
+            </View>
+
             <Pressable
                 style={styles.button}
                 onPress={() => {writeCommand("501221065:open")}}>
@@ -165,7 +179,7 @@ export default function controlPanel() {
             </Pressable>
             <Pressable
                 style={styles.button}
-                onPress={() => setModalVisible(true)}>
+                onPress={() => showAlert("Паролата за отключване е конфигурирана. Можете да се раздвоите")}>
                 <Text style={styles.button_text}>Зaключи</Text>
             </Pressable>
             <Pressable
@@ -173,33 +187,6 @@ export default function controlPanel() {
                 onPress={() => disconnectFromDevice(deviceId)}>
                 <Text style={styles.button_text}>Раздвояване</Text>
             </Pressable>
-            <Text></Text>
-
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}> // Android back button
-                <View style={styles.overlay}>
-                    <View style={styles.modalContainer}>
-                        <Text style={styles.label}>Идентификатор на скоба</Text>
-                        <TextInput
-                            style={styles.input}
-                            value={bracketid}
-                            onChangeText={setBracketid}/>
-
-                        <Text style={styles.label}>Регистрационен номер на автомобил</Text>
-                        <TextInput
-                            style={styles.input}
-                            value={carNumber}
-                            onChangeText={setCarNumber}/>
-
-                        <TouchableOpacity style={styles.button} onPress={makeRequest}>
-                            <Text style={styles.button_text}>Потвърди</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </Modal>
         </SafeAreaView>
     );
 

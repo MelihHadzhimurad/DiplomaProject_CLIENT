@@ -21,7 +21,7 @@ export default function Index() {
         }}
       />
       
-      <Text style={styles.header}>Добре дошли в онлайн платформата на градска мобилност!</Text>
+      <Text style={styles.header}>Добре дошли в приложението за управление на умни скоби</Text>
       
       <Pressable
         style={styles.button}
