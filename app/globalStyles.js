@@ -79,6 +79,35 @@ export const styles = StyleSheet.create({
 
     disconnect_button: {
         marginTop: 70
+    },
+
+    overlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.4)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    modalContainer: {
+        width: '90%',
+        padding: 20,
+        borderRadius: 10,
+        backgroundColor: '#fff',
+        elevation: 5,
+    },
+
+    label: {
+        fontWeight: 'bold',
+        marginTop: 10,
+    },
+
+    input: {
+        borderWidth: 1,
+        borderColor: '#aaa',
+        borderRadius: 5,
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+        marginTop: 5,
     }
     
 });

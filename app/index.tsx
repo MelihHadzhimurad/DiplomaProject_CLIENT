@@ -30,7 +30,8 @@ export default function Index() {
       </Pressable>
 
       <Pressable
-        style={styles.button}>
+        style={styles.button}
+        onPress={() => {router.push('/bracketCheck/bracketCheck')}}>
         <Text style={styles.button_text}>Проверка за поставена скоба</Text>
       </Pressable>
     </SafeAreaView>

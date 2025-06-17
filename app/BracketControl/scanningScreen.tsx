@@ -9,7 +9,7 @@ import { styles } from "../globalStyles";
 
 export default function BracketControl() {
 
-    const { permissionKey } = useLocalSearchParams();
+    const { rawToken } = useLocalSearchParams();
     const [ devices, setDevices ] = useState<Device[]>([]);
     const manager = useBleManager();
     const [scanFlag, setScanFlag] = useState(false);
@@ -30,6 +30,7 @@ export default function BracketControl() {
             
             if (Platform.OS === 'android') {
                 await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+                await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION);
                 await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT);
                 await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN);          
             }
@@ -97,7 +98,8 @@ export default function BracketControl() {
                     <Pressable
                         style={styles.device}
                         onPress={() =>{ router.push({ pathname: "/BracketControl/controlPanel",
-                                                      params: { "rawId": encodeURIComponent(item.id)}}) }}>
+                                                      params: { "rawDeviceId": encodeURIComponent(item.id),
+                                                                "rawToken": rawToken}}) }}>
                         <Text>{ item.name }</Text>
                     </Pressable>
                 )}
