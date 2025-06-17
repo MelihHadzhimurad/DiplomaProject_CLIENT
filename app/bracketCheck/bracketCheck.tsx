@@ -1,4 +1,4 @@
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import { useState } from "react";
 import { Pressable, SafeAreaView, Text, TextInput } from "react-native";
 import { PaymentAlert } from "../Auxiliary/auxiliary";
@@ -24,7 +24,7 @@ export default function bracketCheck() {
 
             <Pressable
                 style={styles.button}
-                onPress={() => PaymentAlert(40)}>
+                onPress={() => PaymentAlert(40, router)}>
                 <Text style={styles.button_text}>Провери</Text>
             </Pressable>
 

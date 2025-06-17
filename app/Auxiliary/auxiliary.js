@@ -11,7 +11,7 @@ export function showAlert(message) {
   );
 }
 
-export function PaymentAlert(amount) {
+export function PaymentAlert(amount, router) {
     Alert.alert(
       "Глоба на стойност "+ amount +"лв",
       "Желаете ли да я платите",
@@ -23,7 +23,7 @@ export function PaymentAlert(amount) {
         },
         {
           text: "Плати",
-          onPress: () => {}
+          onPress: () => {router.push('../bracketCheck/paymentScreen')}
         }
       ],
       { cancelable: false }
