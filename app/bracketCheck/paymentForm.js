@@ -1,7 +1,7 @@
 import { Button, SafeAreaView } from "react-native";
 import { styles } from "../globalStyles";
 
-const { useStripe, CardField, CardForm } = require("@stripe/stripe-react-native");
+const { useStripe, CardField } = require("@stripe/stripe-react-native");
 const { useState } = require("react");
 
 const PaymentForm = () => {
@@ -31,11 +31,13 @@ const PaymentForm = () => {
     }
 
     return(
-        <SafeAreaView style={{padding: 20, alignItems: 'center', justifyContent: 'center'}}>
-            <CardForm
-            onFormComplete={(card) => setCardDetails(card)}
-            style={{height: 300}}/>
-            <Button style={styles.button} title="Потвърди" onPress={processPay}/>
+        <SafeAreaView style={{ padding: 20, justifyContent:'center' }}>
+            <CardField
+                postalCodeEnabled={false}
+                onCardChange={(card) => setCardDetails(card)}
+                style={{ height: 50, marginBottom: 20, marginTop: "70%" }}
+            />
+            <Button style={ styles.button } title="Потвърди" onPress={processPay} />
         </SafeAreaView>
     );
 }
