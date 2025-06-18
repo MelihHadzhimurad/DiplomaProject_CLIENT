@@ -1,17 +1,17 @@
+import { router } from "expo-router";
 import { Button, SafeAreaView } from "react-native";
 import { styles } from "../globalStyles";
 
 const { useStripe, CardField } = require("@stripe/stripe-react-native");
 const { useState } = require("react");
 
-const PaymentForm = () => {
+const PaymentForm = ({ clientSecretProp }) => {
     const { confirmPayment } = useStripe();
     const [cardDetails, setCardDetails] = useState();
 
     const processPay = async () => {
         try {
-            const response = await fetch('');
-            const { clientSecret } = await response.json();
+            const { clientSecret } = clientSecretProp;
 
             const { paymentIntent, error } = await confirmPayment(clientSecret, {
                 type: 'Card',
@@ -28,6 +28,35 @@ const PaymentForm = () => {
         }catch(error) {
             showAlert("Грешка! Изплащането не може да се извърши");
         }
+
+        try {
+            const response = await fetch('https://localhost:7028/fine/confirm', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        'paymentId': paymentIntent
+                    })
+                });
+            
+                const result = await response.text();
+            
+                if(!response.ok) {
+                    showAlert("Грешка!")
+                    return;
+                }
+            
+                router.replace({ pathname: "/BracketControl/scanningScreen",
+                                 params: {
+                                    "rawUnlockCode": result
+                                 }
+                 });
+            
+            }catch(error) {
+                showAlert("Грешка!\nОпитайте пак.");
+                setCarId("");
+            }
     }
 
     return(

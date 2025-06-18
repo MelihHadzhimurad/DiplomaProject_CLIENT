@@ -11,7 +11,7 @@ export function showAlert(message) {
   );
 }
 
-export function PaymentAlert(amount, router) {
+export function PaymentAlert(amount, paymentIntent, router) {
     Alert.alert(
       "Глоба на стойност "+ amount +"лв",
       "Желаете ли да я платите",
@@ -23,7 +23,12 @@ export function PaymentAlert(amount, router) {
         },
         {
           text: "Плати",
-          onPress: () => {router.push('../bracketCheck/paymentScreen')}
+          onPress: () => { router.replace({ pathname: "/bracketCheck/paymentScreen",
+                                           params: {
+                                              "rawIntent": encodeURIComponent(paymentIntent)
+                                           }
+                            });
+                          }
         }
       ],
       { cancelable: false }

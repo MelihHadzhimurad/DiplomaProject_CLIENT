@@ -87,7 +87,7 @@ export default function controlPanel() {
 
     const makeRequest = async () => {
         try {
-            const response = await fetch('https://localhost:7028/fine', {
+            const response = await fetch('https://localhost:7028/fine/addnewfine', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -98,6 +98,7 @@ export default function controlPanel() {
                     'carNumber': carNumber,
                     'latitude': latitude,
                     'longtitude': longtitude,
+                    'zone': "green"
                 })
             });
 
