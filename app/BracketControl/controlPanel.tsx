@@ -16,8 +16,6 @@ export default function controlPanel() {
     const permissionKey = decodeURIComponent(rawToken.toString()).split("=")[1];
     const [bracketid, setBracketid] = useState("");
     const [carNumber, setCarNumber] = useState("");
-    const [latitude, setLatitude] = useState(0);
-    const [longtitude, setLongtitude] = useState(0);
     
     const inspectorServiceUUID = "0bc17447-65e5-49b8-bf0d-d611b909bfac";
     const messageCharacteristicUUID = "0538af52-6bcd-4e39-b82c-38defaa620e9";
@@ -32,12 +30,6 @@ export default function controlPanel() {
     const changeMessage = (message: string) => {
         setMessage(message);
     }
-
-    const lockPressed = async () => {
-        const loc = await Location.getCurrentPositionAsync();
-        setLatitude(loc.coords.latitude);
-        setLongtitude(loc.coords.longitude);
-    };
 
     if(!isConnected) {
         try {
@@ -87,7 +79,26 @@ export default function controlPanel() {
 
     const makeRequest = async () => {
         try {
-            const response = await fetch('https://localhost:7028/fine/addnewfine', {
+            let { status } = await Location.requestForegroundPermissionsAsync();
+
+            if (status !== 'granted') {
+                showAlert("Услугите за местоположение не са разрешени!");
+                return;
+            }
+
+            let loc;
+
+            for (let count = 0; count <= 5; count++) {
+            loc = await Location.getCurrentPositionAsync({ accuracy:Location.Accuracy.High });
+
+            if(loc.coords.latitude === 0 || loc.coords.longitude === 0) {
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+                continue;
+                }
+                break;
+            }
+
+            const response = await fetch('http://192.168.1.15:5291/fine/addnewfine', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -96,8 +107,8 @@ export default function controlPanel() {
                 body: JSON.stringify({
                     'bracketId': bracketid,
                     'carNumber': carNumber,
-                    'latitude': latitude,
-                    'longtitude': longtitude,
+                    'latitude': loc?.coords.latitude,
+                    'longtitude': loc?.coords.longitude,
                     'zone': "green"
                 })
             });
@@ -112,18 +123,18 @@ export default function controlPanel() {
                     switch (result) {
                         case '1':
                             showAlert("Невалиден идентификатор на скоба!\nОпитайте пак.");
-                            break;
+                            return;
                         
                         case '2':
                             showAlert("За колата има активна скоба!\nПроверете пак.");
-                            break;
+                            return;
                     
                         default:
-                            showAlert("Неуспешно завършване!\nОпитайте пак.");
-                            break;
+                            alert(response.status);
+                            return;
                     }
                 }
-                else { showAlert("Неуспешно завършване!\nОпитайте пак."); }
+                else { showAlert("Неуспешно завършване!\nОпитайте пак."); return; }
             }
 
             writeCommand("501221065:client-"+result);
@@ -180,7 +191,7 @@ export default function controlPanel() {
             </Pressable>
             <Pressable
                 style={styles.button}
-                onPress={() => showAlert("Паролата за отключване е конфигурирана. Можете да се раздвоите")}>
+                onPress={() => makeRequest()}>
                 <Text style={styles.button_text}>Зaключи</Text>
             </Pressable>
             <Pressable

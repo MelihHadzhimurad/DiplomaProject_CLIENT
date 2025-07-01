@@ -10,7 +10,7 @@ import { styles } from "../globalStyles";
 export default function BracketControl() {
 
     const { rawUnlockCode } = useLocalSearchParams();
-    const unlockCode = decodeURIComponent(rawUnlockCode.toString());
+    console.log(rawUnlockCode);
 
     const { rawToken } = useLocalSearchParams();
     const [ devices, setDevices ] = useState<Device[]>([]);
@@ -68,45 +68,6 @@ export default function BracketControl() {
         scanForDevices();
     }, [scanFlag]);
 
-    const unlockBracket = (deviceId: string) => {
-        const manager = useBleManager();
-        const [connectedDevice, setConnectedDevice] = useState<Device | null>(null);
-        const userServiceUUID = "db51410d-d238-4ab7-b28a-ce3207118b0a";
-        const messageCharacteristicUUID = "af56e78f-b47e-40e7-a8f6-2869b4bef7e2";
-        const commandCharacteristicUUID = "b804ebc2-09ce-43f9-bc88-46d5ee064ca5";
-        
-        try {
-            manager.connectToDevice(deviceId).then(async device => {
-            showAlert("Успешно свързване");
-            setConnectedDevice(device);
-            await device.discoverAllServicesAndCharacteristics();
-            
-            const base64cmd = Buffer.from(unlockCode, 'utf-8').toString('base64');
-            connectedDevice?.writeCharacteristicWithResponseForService(
-            userServiceUUID,
-            commandCharacteristicUUID,
-            base64cmd).then(async value => {
-                
-            const readedMessage = connectedDevice?.readCharacteristicForService(
-                userServiceUUID,
-                messageCharacteristicUUID).then(data => {
-                    if(data.value !== null) {
-                        showAlert(Buffer.from(data.value, 'base64').toString('utf-8'));
-                    }
-                    }).catch (error => { 
-                        showAlert("Грешка при четене на данни!");
-                    });
-
-            }).catch(error => {
-                showAlert("Грешка при изпращане на команда"+error);
-            });
-
-            }) } 
-            catch (error) { 
-            showAlert('Неуспешно свързване, опитайте пак');
-        }
-    }
-
     return(
         <SafeAreaView style={styles.container} >
             <Stack.Screen
@@ -140,14 +101,16 @@ export default function BracketControl() {
                     <Pressable
                         style={styles.device}
                         onPress={() =>{ 
-                            if(rawToken !== null || rawToken !== "")
+                            if(rawToken != null)
                             {
                                 router.push({ pathname: "/BracketControl/controlPanel",
                                               params: { "rawDeviceId": encodeURIComponent(item.id),
                                                         "rawToken": rawToken}});
                             } else
                             {
-                                unlockBracket(item.id);
+                                router.push({ pathname: "/BracketControl/userUnlockScreen",
+                                              params: { "rawId": encodeURIComponent(item.id),
+                                                        "rawUnlockCode": rawUnlockCode}});
                             }}}>
                         <Text>{ item.name }</Text>
                     </Pressable>

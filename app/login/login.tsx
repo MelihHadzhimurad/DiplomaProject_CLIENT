@@ -12,14 +12,15 @@ export default function login() {
 
     const loginRequest = async () => {
         try {
-            const response = await fetch('https://localhost:7028/auth/login', {
+            const response = await fetch('http://192.168.1.15:5291/auth', {
                 method: 'POST',
                 headers: {
+                    'Accept':'text/plain',
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    username: {username},
-                    password: {password}
+                    userName: username,
+                    password: password
                 })
             });
 
@@ -29,14 +30,17 @@ export default function login() {
             setUsername("");
 
             if(!response.ok) {
-                if (response.status === 404) { showAlert("Невалидни данни!"); }
-                else { showAlert("Неуспешно влизане!\nОпитайте пак."); }
+                if (response.status === 404) {
+                    showAlert("Невалидни данни!");
+                    return;
+                 }
+                else { showAlert(response.status.toString()); return; }
             }
 
             router.push({ pathname: "/BracketControl/scanningScreen",
                           params: { "rawToken": encodeURIComponent(result) }
             });
-        }catch(error) { showAlert("Неуспешно влизане!\nОпитайте пак."); }
+        }catch(error) { alert(error); }
     };
 
     return(
@@ -60,9 +64,7 @@ export default function login() {
             
             <Pressable
                 style={styles.button}
-                onPress={() => router.push({ pathname: "/BracketControl/scanningScreen",
-                          params: { "rawToken": encodeURIComponent("someKey") }
-            })} >
+                onPress={() => loginRequest()} >
                     <Text style={styles.button_text}>Потвърди</Text>
             </Pressable>
             

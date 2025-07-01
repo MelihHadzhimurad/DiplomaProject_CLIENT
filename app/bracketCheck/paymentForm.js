@@ -1,5 +1,6 @@
 import { router } from "expo-router";
 import { Button, SafeAreaView } from "react-native";
+import { showAlert } from "../Auxiliary/auxiliary";
 import { styles } from "../globalStyles";
 
 const { useStripe, CardField } = require("@stripe/stripe-react-native");
@@ -11,10 +12,10 @@ const PaymentForm = ({ clientSecretProp }) => {
 
     const processPay = async () => {
         try {
-            const { clientSecret } = clientSecretProp;
+            const paymentIntentClientSecret = clientSecretProp;
 
-            const { paymentIntent, error } = await confirmPayment(clientSecret, {
-                type: 'Card',
+            const { paymentIntent, error } = await confirmPayment(paymentIntentClientSecret, {
+                paymentMethodType: 'Card',
                 billingDetails: {
                     email: 'melihchohacimurat10@gmail.com',
                 }
@@ -22,31 +23,39 @@ const PaymentForm = ({ clientSecretProp }) => {
 
             if(error) {
                 showAlert("Плащането е неуспешно!" + error.message);
+                console.log(error);
             } else if(paymentIntent) {
                 showAlert("Плащането е успешно!");
+                return paymentIntent.id;
+                
             }
         }catch(error) {
             showAlert("Грешка! Изплащането не може да се извърши");
         }
+    }
 
+    const fetchUnlockCode = async (paymentIdParam) => {
         try {
-            const response = await fetch('https://localhost:7028/fine/confirm', {
+            const response = await fetch('http://192.168.1.15:5291/fine/confirm', {
                     method: 'POST',
                     headers: {
+                        'Accept':'text/plain',
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        'paymentId': paymentIntent
+                        'paymentIntent': paymentIdParam
                     })
                 });
             
                 const result = await response.text();
+
+                console.log("Server response - ", result);
             
                 if(!response.ok) {
                     showAlert("Грешка!")
                     return;
                 }
-            
+
                 router.replace({ pathname: "/BracketControl/scanningScreen",
                                  params: {
                                     "rawUnlockCode": result
@@ -55,8 +64,13 @@ const PaymentForm = ({ clientSecretProp }) => {
             
             }catch(error) {
                 showAlert("Грешка!\nОпитайте пак.");
-                setCarId("");
+                console.log(error);
             }
+    }
+
+    const paymentConfirmed = async () => {
+        const paymentIdentifier = await processPay();
+        await fetchUnlockCode(paymentIdentifier);
     }
 
     return(
@@ -66,7 +80,7 @@ const PaymentForm = ({ clientSecretProp }) => {
                 onCardChange={(card) => setCardDetails(card)}
                 style={{ height: 50, marginBottom: 20, marginTop: "70%" }}
             />
-            <Button style={ styles.button } title="Потвърди" onPress={processPay} />
+            <Button style={ styles.button } title="Потвърди" onPress={paymentConfirmed} />
         </SafeAreaView>
     );
 }

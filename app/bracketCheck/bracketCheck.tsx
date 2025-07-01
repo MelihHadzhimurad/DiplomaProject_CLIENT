@@ -10,7 +10,7 @@ export default function bracketCheck() {
 
     const makeRequest = async () => {
         try {
-            const response = await fetch('https://localhost:7028/fine/checkforfine', {
+            const response = await fetch('http://192.168.1.15:5291/fine/checkforfine', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -28,7 +28,6 @@ export default function bracketCheck() {
                     return;
                 }
             }
-    
             PaymentAlert(result.amount, result.paymentId, router);
     
         }catch(error) {
